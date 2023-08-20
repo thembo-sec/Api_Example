@@ -41,7 +41,7 @@ class ApiSession(requests.Session):
         return self.existing_endpoint(endpoint_args)
 
 
-class Endpoint(object):
+class Endpoint:
     def __init__(self, name, session: ApiSession, methods: list = None) -> None:
         self.name = name
         self.session = session
