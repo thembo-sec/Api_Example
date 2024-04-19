@@ -33,36 +33,52 @@ class ApiSession(requests.Session):
         """
 
         self.existing_endpoint = Endpoint(
-            name="existing_endpoint", session=self, methods=["GET", "POST"]
+            name="existing_endpoint",
+            session=self,
+            methods=["GET", "POST"],
+            required={"GET": ["timestamp"]},
         )
 
     def call_existing_endpoint_wrapper(self, endpoint_args):
         """Wrapper method for the `existing_endpoint` child"""
         return self.existing_endpoint(endpoint_args)
 
+    def _response_hander(self, response: requests.Response):
+        match response.status_code:
+            case 200:
+                return response
+            case _:
+                print(
+                    f"Error. Status: {response.status_code}. Details: {response.json()}"
+                )
+
 
 class Endpoint:
-    def __init__(self, name, session: ApiSession, methods: list = None) -> None:
+    def __init__(
+        self, name, session: ApiSession, methods: list = None, required: dict = None
+    ) -> None:
         self.name = name
         self.session = session
         self.methods = methods
+        self.required = required
         print(f"Creating endpoint at {session.base_url}/{self.name}")
 
     def __getattr__(self, name):
-        return self.Endpoint(name)
+        return Endpoint("/".join([self.name, name]), self.session)
 
     def __call__(self, *args, **kwargs) -> requests.Response:
         """Called when an unknown method is called on itself"""
         print(f"Calling {self.name}")
 
         method = self._validate_method(kwargs.pop("method", "GET"))
+        self.check_required(parameters=kwargs, method=method)
         data = kwargs.pop("data", None)
 
-        # response = session.request(
-        #     method=method, url=self._build_url, params=kwargs, data=data
-        # )
+        response = session.request(
+            method=method, url=self._build_url, params=kwargs, data=data
+        )
 
-        # return response
+        return response
 
     def _build_url(self):
         url = "/".join(self.session.base_url)
@@ -78,10 +94,31 @@ class Endpoint:
                 )
         return method
 
+    def check_required(self, parameters: dict, method: str) -> dict:
+        """Check that any request has the required method and parameters on the endpoint."""
+        if self.methods and (method not in self.methods):
+            raise requests.exceptions.HTTPError(
+                f"Invalid method on {self.name}. Valid methods: {self.methods}"
+            )
+
+        if self.required is None:
+            return parameters
+
+        for parameter in self.required.get(method):
+            if parameters is None:
+                raise KeyError(
+                    f"Query missing parameters. Required parameters: {self.required.get(method)}"
+                )
+            if parameters.get(parameter, None) is None:
+                raise KeyError(
+                    f"Query missing required parameter. Given: {parameters}. Required: {self.required.get(method)}"
+                )
+
+        return parameters
+
 
 if __name__ == "__main__":
     session = ApiSession()
-    session.new_endpoint  # create the non-existing endpoint
     session.new_endpoint()  # call endpoint
     session.existing_endpoint(method="PUT")  # should throw error
     session.call_existing_endpoint_wrapper()  # call the endpoint via the wrapper func
