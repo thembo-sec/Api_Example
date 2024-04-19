@@ -67,7 +67,7 @@ class ApiSession(requests.Session):
 
 class Endpoint:
     def __init__(
-        self, name, session: ApiSession, methods: list = None, required: dict = None
+        self, name, session: ApiSession, methods: list = None, required: dict = {}
     ) -> None:
         self.name = name
         self.session = session
@@ -86,11 +86,11 @@ class Endpoint:
         self.check_required(parameters=kwargs, method=method)
         data = kwargs.pop("data", None)
 
-        response = session.request(
-            method=method, url=self._build_url, params=kwargs, data=data
-        )
+        # response = session.request(
+        #     method=method, url=self._build_url, params=kwargs, data=data
+        # )
 
-        return response
+        # return response
 
     def _build_url(self):
         url = "/".join(self.session.base_url)
@@ -110,7 +110,7 @@ class Endpoint:
     def check_required(self, parameters: dict, method: str) -> dict:
         """Check that any request has the required parameters on the endpoint."""
 
-        for parameter in self.required.get(method):
+        for parameter in self.required.get(method, []):
             if parameters is None:
                 raise KeyError(
                     f"Query missing parameters. Required parameters: {self.required.get(method)}"
