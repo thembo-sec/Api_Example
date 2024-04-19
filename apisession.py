@@ -4,6 +4,18 @@ BASE_URL = "SOME_URL"
 
 
 class ApiSession(requests.Session):
+    """
+    Session used for interacting with a rest API.
+
+    Endpoints are created and called dynamically. Eg, an endpoint would be called:
+    `ApiSession.endpoint(id=1)`
+
+    Args:
+        base_url (str): Base url for the API
+        SSL_verification (bool): Use ssl verification
+        access_token (str): Access token/api_key
+    """
+
     def __init__(
         self,
         base_url: str = BASE_URL,
@@ -29,7 +41,7 @@ class ApiSession(requests.Session):
     def create_endpoints(self):
         """
         Create pre-existing endpoints, can be interacted with directly or via a
-        wrapper method call
+        wrapper method call. Useful for once prototyping is complete.
         """
 
         self.existing_endpoint = Endpoint(
@@ -85,6 +97,7 @@ class Endpoint:
         return url
 
     def _validate_method(self, method):
+        """Check the method on that endpoint is valid."""
         if self.methods is not None:
             if method not in self.methods:
                 raise requests.exceptions.HTTPError(
