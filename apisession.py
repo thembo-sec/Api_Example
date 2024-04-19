@@ -95,14 +95,7 @@ class Endpoint:
         return method
 
     def check_required(self, parameters: dict, method: str) -> dict:
-        """Check that any request has the required method and parameters on the endpoint."""
-        if self.methods and (method not in self.methods):
-            raise requests.exceptions.HTTPError(
-                f"Invalid method on {self.name}. Valid methods: {self.methods}"
-            )
-
-        if self.required is None:
-            return parameters
+        """Check that any request has the required parameters on the endpoint."""
 
         for parameter in self.required.get(method):
             if parameters is None:
