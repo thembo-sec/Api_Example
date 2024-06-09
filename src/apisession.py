@@ -1,5 +1,6 @@
 import requests
 
+# TODO update this to VT API as I go
 BASE_URL = "SOME_URL"
 
 
