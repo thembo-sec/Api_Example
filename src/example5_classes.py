@@ -27,17 +27,15 @@ class VirusTotal:
 
     def get_domain(self, domain: str) -> dict:
         """Gets the VT response for a given domain"""
-        headers = {"x-apikey": API_KEY}
-        url = f"{BASE_URL}/{domain}"
-        request = requests.get(url, headers=headers)
+        url = f"{DOMAIN_URL}/{domain}"
+        request = requests.get(url, headers=self.headers)
 
         return request.json()
 
     def get_file(self, hash: str) -> dict:
         """Gets the VT response for a given file hash"""
-        headers = {"x-apikey": API_KEY}
         url = f"{FILE_URL}/{hash}"
-        request = requests.get(url, headers=headers)
+        request = requests.get(url, headers=self.headers)
 
         return request.json()
 
