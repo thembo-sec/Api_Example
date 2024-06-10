@@ -46,7 +46,7 @@ class Endpoint:
 
     def __call__(self, *args, **kwargs):
         """
-        Doing something!
+        I should call them...
         """
         method = kwargs.pop("method", "GET")
         if len(args) > 0:
