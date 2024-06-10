@@ -61,5 +61,8 @@ if __name__ == "__main__":
     vt.popular_threat_categories
 
     vt.popular_threat_categories()
+    # I can instantiate and call at the same time?
+
     vt.domains()
     vt.files()
+    # 🦀 and C programers screaming and crying, they'd need at least 10k lines for this
