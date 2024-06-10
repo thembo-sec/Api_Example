@@ -29,7 +29,6 @@ class VirusTotal(requests.Session):
     """
 
     def __init__(self, api_key: str = API_KEY) -> None:
-        # now we don't need to add those pesky headers every request
         super().__init__()
         self.headers.update({"x-apikey": api_key})
 
