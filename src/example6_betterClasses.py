@@ -2,7 +2,7 @@ import configparser
 import json
 import requests
 
-config = configparser.ConfigParser()
+config = configparser.ConfigParser(interpolation=None)
 config.read("config.ini")
 API_KEY = config["API"]["KEY"]
 
