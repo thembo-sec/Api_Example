@@ -127,8 +127,7 @@ class Endpoint:
         Returns:
             str: The method being called.
         """
-        logger.debug(method)
-        logger.debug(self.methods)
+
         if self.methods is not None:
             if method not in self.methods:
                 raise requests.exceptions.HTTPError(
