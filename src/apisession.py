@@ -29,7 +29,7 @@ class ApiSession(requests.Session):
 
         super().__init__()
         self.base_url = base_url
-        self.verify == ssl_verification
+        self.verify = ssl_verification
         self.headers.update({"Authorization": "Base {}".format(access_token)})
         self.create_endpoints()
 
