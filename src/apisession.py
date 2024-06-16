@@ -1,6 +1,11 @@
+"""
+Ended up as generic abstract example, will likely get rid of this now I have stepped examples.
+
+"""
+
 import requests
 
-# TODO update this to VT API as I go
+
 BASE_URL = "SOME_URL"
 
 
@@ -29,7 +34,7 @@ class ApiSession(requests.Session):
 
         super().__init__()
         self.base_url = base_url
-        self.verify = ssl_verification
+        self.verify == ssl_verification
         self.headers.update({"Authorization": "Base {}".format(access_token)})
         self.create_endpoints()
 
