@@ -14,9 +14,6 @@ logging.basicConfig(format=LOG_FMT, level=0, datefmt="%Y/%m/%d %I:%M:%S")
 
 # URLS
 BASE_URL = "https://www.virustotal.com/api/v3/"
-IP_URL = f"{BASE_URL}/ip_addresses"
-DOMAIN_URL = f"{BASE_URL}/domains"
-FILE_URL = f"{BASE_URL}/files"
 
 
 # Make a child class of a request Session. Comes with all this handy functionality
