@@ -134,7 +134,7 @@ class Endpoint:
                 )
         return method
 
-    def _check_required(self, params: dict, method: str) -> dict:
+    def _check_required(self, method: str, params: dict = None) -> dict:
         """Checks if the request contains any missing parameters
 
         Args:
@@ -148,14 +148,16 @@ class Endpoint:
             dict: parameter dictionary
         """
         for parameter in self.required.get(method, []):
-            if params is None:
+            if not params:
                 raise KeyError(
                     f"Query missing required parameters. Required: {self.required.get(method)}"
                 )
+
             if params.get(parameter, None) is None:
                 raise KeyError(
                     f"Query missing required parameters. Given: {params}. Required: {self.required.get(method)}"
                 )
+
         return params
 
     def _response_handler(self, response: requests.Response) -> requests.Response:
@@ -183,7 +185,7 @@ if __name__ == "__main__":
 
     # create it, call it and grab the data all here
     # search = vt.search(query="f3df1be26cc7cbd8252ab5632b62d740")
-    ip = vt.ip_addresses("9.9.9.9", method="POST")
+    ip = vt.ip_addresses()
 
     # print(json.dumps(search, indent=2))
     # print(json.dumps(ip, indent=2))
