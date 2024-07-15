@@ -6,6 +6,7 @@ import logging
 
 config = configparser.ConfigParser(interpolation=None)
 config.read("config.ini")
+
 API_KEY = config["API"]["KEY"]
 LOG_FMT = config["LOG"]["fmt"]
 
