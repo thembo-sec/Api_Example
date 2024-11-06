@@ -107,6 +107,7 @@ class Endpoint:
             response = self.session.request(
                 method=method, url=url, params=kwargs, data=data
             )
+
             return self._response_handler(response)
 
         except Exception as err:
