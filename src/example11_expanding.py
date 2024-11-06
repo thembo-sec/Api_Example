@@ -95,7 +95,9 @@ class Endpoint:
         I should call them...
         """
         method = self._validate_method(kwargs.pop("method", "GET"))
+
         self._check_required(params=kwargs, method=method)
+        
         data = kwargs.pop("data", None)
 
         if len(args) > 0:
@@ -107,7 +109,7 @@ class Endpoint:
             response = self.session.request(
                 method=method, url=url, params=kwargs, data=data
             )
-            return self._response_handler(response)
+            return self._response_handler(response).json()
 
         except Exception as err:
             logger.exception(err)
@@ -174,7 +176,7 @@ class Endpoint:
                 return response
             case _:
                 logger.error(
-                    f"Response error: {response.status_code}. Details: {response.text}"
+                    f"Response error: {response.status_code}. Details: {response.text}. Url: {response.url}"
                 )
                 return response
 
@@ -184,8 +186,8 @@ if __name__ == "__main__":
     logger.info("Test")
 
     # create it, call it and grab the data all here
-    # search = vt.search(query="f3df1be26cc7cbd8252ab5632b62d740")
-    ip = vt.ip_addresses()
+    # search = vt.file(query="f3df1be26cc7cbd8252ab5632b62d740")
+    ip = vt.ip_addresses("103.45.69.117", method='POST')
 
-    # print(json.dumps(search, indent=2))
+    print(json.dumps(ip, indent=2))
     # print(json.dumps(ip, indent=2))
