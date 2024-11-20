@@ -34,28 +34,28 @@ class VirusTotal(requests.Session):
 
     def __getattr__(self, name):
         endpoint = Endpoint(name, self)
-        self.__setattr__(name, Endpoint(name, self))
+        self.__setattr__(name, endpoint)
         # return it so it can be instantiated AND called at the same time
         return endpoint
 
 
 class Endpoint:
     def __init__(self, name, session: VirusTotal):
+        logger.info(f"Creating endpoint: {name}. {self.__repr__()}")
         self.name = name
         self.session = session
-        logger.info(f"Creating endpoint: {name}")
+        logger.info(f"Dict: {self.__dict__}")
+
 
     def __call__(self):
         """
         Doing something!
         """
         logger.info("Calling myself")
-        print(f"{self.__repr__()} | {self.__dict__}")
 
 
 if __name__ == "__main__":
     vt = VirusTotal()
-    logger.info("Test")
     #  this shouldn't work, this attribute doesn't exist!
     vt.popular_threat_categories
 
@@ -64,4 +64,3 @@ if __name__ == "__main__":
 
     vt.domains()
     vt.files()
-    # 🦀 and C programers screaming and crying, they'd need at least 10k lines for this
