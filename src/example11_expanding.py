@@ -49,7 +49,7 @@ class VirusTotal(requests.Session):
     def _create_endpoints(self):
         """
         Create a set of existing endpoints
-        """
+        """     
         logger.debug("Creating existing endpoints")
         self.ip_addresses = Endpoint("ip_addresses", session=self, methods=["GET"])
 
@@ -64,7 +64,7 @@ class VirusTotal(requests.Session):
         Returns:
             dict: Info on IP address
         """
-        return self.ip_addresses(ip).json()
+        return self.ip_addresses(ip)
 
 
 class Endpoint:
@@ -174,6 +174,13 @@ class Endpoint:
         match response.status_code:
             case 200:
                 return response
+
+            case 400:
+                logger.error(
+                    f"Response error: {response.status_code}. Details: {response.text}. Url: {response.url}"
+                )
+                return response
+
             case _:
                 logger.error(
                     f"Response error: {response.status_code}. Details: {response.text}. Url: {response.url}"
